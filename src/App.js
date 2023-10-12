@@ -19,12 +19,10 @@ function App() {
 
   async function autoLogin() {
     try {
-      var userName;
-      var userPwd;
-      const content = await cockpit.file('/data/websoft9/appmanage_new/src/config/config.ini').read();
+      const content = await cockpit.file('/var/lib/docker/volumes/websoft9_apphub_config/_data/config.ini').read();
       const config = ini.parse(content);
-      userName = config.gitea.user_name
-      userPwd = config.gitea.user_pwd
+      const userName = config.gitea.user_name
+      const userPwd = config.gitea.user_pwd
 
       if (!userName || !userPwd) {
         setShowAlert(true);
@@ -50,13 +48,13 @@ function App() {
         });
       if (login_response.status != 200) {
         setShowAlert(true);
-        setAlertMessage("Gitea Login Error.");
+        setAlertMessage("Auth Gitea Error.");
         return;
       }
       setIframeSrc(baseURL + '/w9git/explore/repos');
     } catch (error) {
       setShowAlert(true);
-      setAlertMessage("Gitea Login Error." + error);
+      setAlertMessage("Auth Gitea Error.");
     }
   }
 
