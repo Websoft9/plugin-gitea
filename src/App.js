@@ -58,8 +58,8 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    autoLogin();
+  useEffect(async () => {
+    await autoLogin();
     return () => {
     }
   }, []);
