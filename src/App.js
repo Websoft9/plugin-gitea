@@ -1,7 +1,6 @@
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import cockpit from 'cockpit';
-import ini from 'ini';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
@@ -19,10 +18,12 @@ function App() {
 
   async function autoLogin() {
     try {
-      const content = await cockpit.file('/var/lib/docker/volumes/websoft9_apphub_config/_data/config.ini').read();
-      const config = ini.parse(content);
-      const userName = config.gitea.user_name
-      const userPwd = config.gitea.user_pwd
+      var script = "docker exec -i websoft9-apphub apphub getconfig --section gitea";
+      let content = (await cockpit.spawn(["/bin/bash", "-c", script])).trim();
+      content = JSON.parse(content);
+
+      const userName = content.user_name;
+      const userPwd = content.user_pwd;
 
       if (!userName || !userPwd) {
         setShowAlert(true);
@@ -54,7 +55,7 @@ function App() {
       setIframeSrc(baseURL + '/w9git/explore/repos');
     } catch (error) {
       setShowAlert(true);
-      setAlertMessage("Auth Gitea Error.");
+      setAlertMessage("Login Gitea Error.");
     }
   }
 
