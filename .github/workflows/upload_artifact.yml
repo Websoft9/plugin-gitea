@@ -70,6 +70,7 @@ jobs:
           cp CHANGELOG.md artifacts/
           cp gitea.json artifacts/
           mv gitea-${{ env.VERSION }}.zip artifacts/
+          cp artifacts/gitea-${{ env.VERSION }}.zip artifacts/gitea-latest.zip
 
       - name: Upload To Azure Blob
         uses: LanceMcCarthy/Action-AzureBlobUpload@v2
