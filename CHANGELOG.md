@@ -1,3 +1,5 @@
+## 0.0.1-rc1 release on 2023-10-24
+1. Fix some known bugs
 ## 0.0.4 release on 2023-08-15
 1. Optimize authentication methods
 ## 0.0.3 release on 2023-08-11
