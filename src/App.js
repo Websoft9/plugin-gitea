@@ -19,7 +19,7 @@ function App() {
   async function autoLogin() {
     try {
       var script = "docker exec -i websoft9-apphub apphub getconfig --section gitea";
-      let content = (await cockpit.spawn(["/bin/bash", "-c", script])).trim();
+      let content = (await cockpit.spawn(["/bin/bash", "-c", script], { superuser: "try" })).trim();
       content = JSON.parse(content);
 
       const userName = content.user_name;
