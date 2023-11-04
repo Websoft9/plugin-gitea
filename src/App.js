@@ -14,6 +14,8 @@ function App() {
 
   let protocol = window.location.protocol;
   let host = window.location.host;
+  let userName = "websoft9"
+  let userPwd = "websoft9"
   const baseURL = protocol + "//" + (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(host) ? host.split(":")[0] : host);
 
   async function autoLogin() {
@@ -22,8 +24,8 @@ function App() {
       let content = (await cockpit.spawn(["/bin/bash", "-c", script], { superuser: "try" })).trim();
       content = JSON.parse(content);
 
-      const userName = content.user_name;
-      const userPwd = content.user_pwd;
+      userName = content.user_name;
+      userPwd = content.user_pwd;
 
       if (!userName || !userPwd) {
         setShowAlert(true);
@@ -52,25 +54,52 @@ function App() {
         setAlertMessage("Auth Gitea Error.");
         return;
       }
-      setIframeSrc(baseURL + '/w9git/explore/repos');
+
+      setIframeKey(Math.random());
+      var newHash = window.location.hash;
+      if (newHash.includes(`/w9git/${userName}`)) {
+        var index = newHash.indexOf("#");
+        if (index > -1) {
+          var url = newHash.slice(index + 1);
+          setIframeSrc(baseURL + url);
+        }
+      }
+      else {
+        setIframeSrc(baseURL + '/w9git/explore/repos');
+      }
     } catch (error) {
       setShowAlert(true);
       setAlertMessage("Login Gitea Error.");
     }
   }
 
+  const handleHashChange = () => {
+    var newHash = window.location.hash;
+    if (newHash.includes(`/w9git/${userName}`)) {
+      var index = newHash.indexOf("#");
+      if (index > -1) {
+        var content = newHash.slice(index + 1);
+        setIframeKey(Math.random());
+        setIframeSrc(baseURL + content);
+      }
+    }
+  }
+
   useEffect(async () => {
     await autoLogin();
+
+    window.addEventListener("hashchange", handleHashChange, true);
     return () => {
-    }
+      window.removeEventListener("hashchange", handleHashChange, true);
+    };
   }, []);
 
   return (
     <>
       {
-        iframeSrc ? (
+        iframeKey && iframeSrc ? (
           <div className='myGitea' key='container'>
-            <iframe title='Gitea' src={iframeSrc} />
+            <iframe key={iframeKey} title='Gitea' src={iframeSrc} />
           </div>
         ) : (
           <div className="d-flex align-items-center justify-content-center m-5" style={{ flexDirection: "column" }}>
