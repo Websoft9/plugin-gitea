@@ -1,3 +1,5 @@
+## 0.0.2 release on 2023-11-10
+1. improve gitea
 ## 0.0.2 release on 2023-11-08
 1. improve gitea
 ## 0.0.2 release on 2023-11-04
