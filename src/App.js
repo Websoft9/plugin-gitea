@@ -14,8 +14,8 @@ function App() {
 
   let protocol = window.location.protocol;
   let host = window.location.host;
-  let userName = "websoft9"
-  let userPwd = "websoft9"
+  let userName = ""
+  let userPwd = ""
   const baseURL = protocol + "//" + (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(host) ? host.split(":")[0] : host);
 
   async function autoLogin() {
@@ -69,7 +69,16 @@ function App() {
       }
     } catch (error) {
       setShowAlert(true);
-      setAlertMessage("Login Gitea Error.");
+      const errorText = [error.problem, error.reason, error.message]
+        .filter(item => typeof item === 'string')
+        .join(' ');
+
+      if (errorText.includes("permission denied")) {
+        setAlertMessage("Permission denied.");
+      }
+      else {
+        setAlertMessage(errorText || "Login Gitea Error.");
+      }
     }
   }
 
