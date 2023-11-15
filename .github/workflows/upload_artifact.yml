@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: false
-
+      appname: gitea
     steps:
       - uses: actions/checkout@v2
 
@@ -30,7 +30,7 @@ jobs:
       - name: Version convert
         id: convert_version      
         run: |
-          version=$(jq -r '.Version' gitea.json)
+          version=$(jq -r '.Version' "${{ env.appname }}.json")
           version_core=${version%%-*}
           echo "VERSION=$version" >> $GITHUB_OUTPUT
           echo "VERSION_CORE=$version_core" >> $GITHUB_OUTPUT
@@ -63,16 +63,16 @@ jobs:
       - name: Create Zip Archive
         run: |
           mkdir artifacts
-          mv build gitea
-          cp CHANGELOG.md gitea
-          cp gitea.json gitea
-          cp -r docs gitea
-          rsync -av --exclude='changelog_latest.md' *.md gitea/
-          zip -r gitea-${{ steps.convert_version.outputs.VERSION_CORE }}.zip gitea/
+          mv build ${{ env.appname }}
+          cp CHANGELOG.md ${{ env.appname }}
+          cp ${{ env.appname }}.json ${{ env.appname }}
+          cp -r docs ${{ env.appname }}
+          rsync -av --exclude='changelog_latest.md' *.md ${{ env.appname }}/
+          zip -r ${{ env.appname }}-${{ steps.convert_version.outputs.VERSION_CORE }}.zip ${{ env.appname }}/
           cp CHANGELOG.md artifacts/
-          cp gitea.json artifacts/
-          mv gitea-${{ steps.convert_version.outputs.VERSION_CORE }}.zip artifacts/
-          cp artifacts/gitea-${{ steps.convert_version.outputs.VERSION_CORE }}.zip artifacts/gitea-latest.zip
+          cp ${{ env.appname }}.json artifacts/
+          mv ${{ env.appname }}-${{ steps.convert_version.outputs.VERSION_CORE }}.zip artifacts/
+          cp artifacts/${{ env.appname }}-${{ steps.convert_version.outputs.VERSION_CORE }}.zip artifacts/${{ env.appname }}-latest.zip
 
       - name: Upload To Azure Blob
         uses: LanceMcCarthy/Action-AzureBlobUpload@v2
@@ -80,7 +80,7 @@ jobs:
           connection_string: ${{ secrets.AZURE_STORAGE_ARTIFACT }}
           container_name: ${{ steps.convert_version.outputs.CHANNEL }}
           source_folder: artifacts/
-          destination_folder: ./websoft9/plugin/gitea
+          destination_folder: ./websoft9/plugin/${{ env.appname }}
           delete_if_exists: true
           fail_if_source_empty: true
 
@@ -88,7 +88,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            gitea.json
+            ${{ env.appname }}.json
           tag_name: ${{ steps.convert_version.outputs.VERSION }}
           title: Release-${{ steps.convert_version.outputs.VERSION }}
           body: ${{ steps.update_data.outputs.CHANGELOG }}
