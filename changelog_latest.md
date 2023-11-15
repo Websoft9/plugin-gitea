@@ -1,1 +1,1 @@
-1. improve gitea
+1. improve gitea githubaction
