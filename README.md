@@ -7,7 +7,8 @@
 
 This plugin is the entrance to gitea service, it is used to manage the source files of the installed applications. You can change application's property such as port and version by this plugin.
 
-![image](https://github.com/Websoft9/plugin-gitea/assets/16741975/74c3919c-9906-448d-aab9-9334d8fb8d60)
+![image](https://github.com/Websoft9/plugin-gitea/assets/43192516/689a2e55-b73e-4f41-afa7-26a928fbba37)
+
 
 ## Installation and update
 
