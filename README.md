@@ -5,7 +5,7 @@
 
 # Websoft9 Plugin - `gitea`
 
-This plugin is the entrance to gitea service, it is used to manage the source files of the installed applications. You can change application's property such as port and version by this plugin.
+This plugin is the entrance to gitea service, it is used to manage the source files of the installed applications. 
 
 ![image](https://github.com/Websoft9/plugin-gitea/assets/43192516/689a2e55-b73e-4f41-afa7-26a928fbba37)
 
