@@ -12,11 +12,9 @@ function App() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-  let protocol = window.location.protocol;
-  let host = window.location.host;
   let userName = ""
   let userPwd = ""
-  const baseURL = protocol + "//" + (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(host) ? host.split(":")[0] : host);
+  const baseURL = `${window.location.protocol}//${window.location.hostname}`;
 
   async function autoLogin() {
     try {
