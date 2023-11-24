@@ -1,3 +1,5 @@
+## 0.0.4-rc1 release on 2023-11-24
+1. improve gitea githubaction
 ## 0.0.3 release on 2023-11-16
 1. improve gitea githubaction
 ## 0.0.3-rc2 release on 2023-11-15
