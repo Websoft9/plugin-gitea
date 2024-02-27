@@ -2,7 +2,7 @@
   "version": "0.0.4",
   "menu": {
     "nginx": {
-      "label": "Gitea",
+      "label": "Git",
       "path": "index.html",
       "order": 4
     }
