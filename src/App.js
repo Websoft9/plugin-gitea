@@ -14,12 +14,12 @@ function App() {
 
   let userName = ""
   let userPwd = ""
-  const baseURL = `${window.location.protocol}//${window.location.hostname}`;
+  let baseURL = ""
 
   async function autoLogin() {
     try {
-      var script = "docker exec -i websoft9-apphub apphub getconfig --section gitea";
-      let content = (await cockpit.spawn(["/bin/bash", "-c", script], { superuser: "try" })).trim();
+      const script_git = "docker exec -i websoft9-apphub apphub getconfig --section gitea";
+      let content = (await cockpit.spawn(["/bin/bash", "-c", script_git], { superuser: "try" })).trim();
       content = JSON.parse(content);
 
       userName = content.user_name;
@@ -27,9 +27,22 @@ function App() {
 
       if (!userName || !userPwd) {
         setShowAlert(true);
-        setAlertMessage("Gitea Username or Password is empty.");
+        setAlertMessage("Gitea Username or Password Not Set.");
         return;
       }
+
+      const script_nginx = "docker exec -i websoft9-apphub apphub getconfig --section nginx_proxy_manager";
+      let content_nginx = (await cockpit.spawn(["/bin/bash", "-c", script_nginx], { superuser: "try" })).trim();
+      content_nginx = JSON.parse(content_nginx);
+      let listen_port = content_nginx.listen_port;
+
+      if (!listen_port) {
+        setShowAlert(true);
+        setAlertMessage("Nginx Listen Port Not Set.");
+        return;
+      }
+
+      baseURL = `${window.location.protocol}//${window.location.hostname}:${listen_port}`;
 
       const response = await axios.get(baseURL + '/w9git/user/login');
       const doc = new DOMParser().parseFromString(response.data, 'text/html');
