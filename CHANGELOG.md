@@ -1,3 +1,5 @@
+## 0.0.6 release on 2024-05-10
+1. improve gitea githubaction
 ## 0.0.6-rc1 release on 2024-05-08
 1. improve gitea githubaction
 ## 0.0.5-rc1 release on 2024-03-26
