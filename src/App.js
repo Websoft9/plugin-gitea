@@ -85,7 +85,7 @@ function App() {
         .join(' ');
 
       if (errorText.includes("permission denied")) {
-        setAlertMessage("Permission denied.");
+        setAlertMessage("Your user does not have Docker permissions. Grant Docker permissions to this user by command: sudo usermod -aG docker <username>");
       }
       else {
         setAlertMessage(errorText || "Login Gitea Error.");
