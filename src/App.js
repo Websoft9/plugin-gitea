@@ -44,15 +44,18 @@ function App() {
 
       baseURL = `${window.location.protocol}//${window.location.hostname}:${listen_port}`;
 
-      // 首先尝试访问主页，检查是否已经登录
-      try {
-        const checkResponse = await axios.get(baseURL + '/w9git/explore/repos', {
-          withCredentials: true,
-          maxRedirects: 0,
-          validateStatus: (status) => status >= 200 && status < 400
-        });
+      // 获取登录页面和 CSRF token
+      const response = await axios.get(baseURL + '/w9git/user/login', {
+        withCredentials: true
+      });
+      const doc = new DOMParser().parseFromString(response.data, 'text/html');
 
-        // 如果能成功访问，说明已经登录，直接设置 iframe
+      // 获取 CSRF token
+      const csrfElement = doc.querySelector('input[name="_csrf"]');
+
+      if (!csrfElement) {
+        // 可能页面被重定向了（已登录），尝试直接加载 iframe
+        console.log('No CSRF token found, attempting to load iframe anyway');
         setIframeKey(Math.random());
         var newHash = window.location.hash;
         if (newHash.includes(`/w9git/${userName}`)) {
@@ -64,24 +67,6 @@ function App() {
         } else {
           setIframeSrc(baseURL + '/w9git/explore/repos');
         }
-        return;
-      } catch (checkError) {
-        // 如果未登录或出错，继续执行登录流程
-        console.log('Not logged in, proceeding with login...');
-      }
-
-      // 获取登录页面和 CSRF token
-      const response = await axios.get(baseURL + '/w9git/user/login', {
-        withCredentials: true
-      });
-      const doc = new DOMParser().parseFromString(response.data, 'text/html');
-
-      // 获取 CSRF token
-      const csrfElement = doc.querySelector('input[name="_csrf"]');
-
-      if (!csrfElement) {
-        setShowAlert(true);
-        setAlertMessage("Failed to get CSRF token from login page. Please check if Gitea is running properly.");
         return;
       }
 
