@@ -1,3 +1,5 @@
+## 0.0.9 release on 2025-11-13
+1. improve gitea githubaction
 ## 0.0.9-rc1 release on 2025-11-13
 1. improve gitea githubaction
 ## 0.0.9-rc1 release on 2025-11-13
